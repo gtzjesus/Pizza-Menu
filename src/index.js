@@ -67,49 +67,63 @@ function Header() {
   );
 }
 function Menu() {
+  const pizzas = pizzaData;
+  const numPizzas = pizzas.length;
   return (
     <main className="menu">
       <h2>Our Menu</h2>
-      <Pizza
-        name="Pizza Spinaci"
-        ingredients="Tomato, mozarella, spinach, and ricotta cheese"
-        photoName="pizzas/spinaci.jpg"
-        price={10}
-      />
-
-      <Pizza
-        name="Pizza Funghi"
-        ingredients="Mushrooms"
-        price={15}
-        photoName="pizzas/funghi.jpg"
-      />
+      {numPizzas > 0 ? (
+        <ul className="pizzas">
+          {pizzas.map((pizza) => (
+            <Pizza pizzaObject={pizza} key={pizza.name} />
+          ))}
+        </ul>
+      ) : (
+        <p>We've run out of pizzas! Come back later!</p>
+      )}
     </main>
   );
 }
 
 function Pizza(props) {
   return (
-    <div className="pizza">
-      <img src={props.photoName} alt={props.name} />
+    <li className="pizza">
+      <img src={props.pizzaObject.photoName} alt={props.pizzaObject.name} />
       <div>
-        <h3>{props.name}</h3>
-        <p>{props.ingredients}</p>
-        <span>{props.price + 3}</span>
+        <h3>{props.pizzaObject.name}</h3>
+        <p>{props.pizzaObject.ingredients}</p>
+        <span>{props.pizzaObject.price + 3}</span>
       </div>
-    </div>
+    </li>
   );
 }
 function Footer() {
   const hour = new Date().getHours();
-  const openHour = 3;
-  const closeHour = 22;
+  const openHour = 12;
+  const closeHour = 15;
   const isOpen = hour >= openHour && hour <= closeHour;
 
-  console.log(isOpen);
+  // if (!isOpen)
+  //   return (
+  //     <footer className="footer">
+  //       <p>
+  //         Comeback between {openHour}:00 and {closeHour}:00
+  //       </p>
+  //     </footer>
+  //   );
 
   return (
     <footer className="footer">
-      {new Date().toLocaleTimeString()} We are open
+      {isOpen ? (
+        <div className="order">
+          <p>We're open until {closeHour}:00. Come visit us or order online!</p>
+          <button className="btn">Order</button>
+        </div>
+      ) : (
+        <p>
+          Comeback between {openHour}:00 and {closeHour}:00
+        </p>
+      )}
     </footer>
   );
 }
